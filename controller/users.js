@@ -16,13 +16,20 @@ const getAllUsers = (req, res) => {
 };
 
 const createUsers = (req, res) => {
-  const { name, email } = req.body;
-  if (!name || !email) {
-    return res.status(400).json({ message: ' Nama dan email wajib diisi' });
+ try {
+    const { name, email } = req.body;
+    if (!name || !email) {
+      return res.status(400).json({ message: 'Nama dan email wajib diisi' });
+    }
+    if (email.includes('error')) {
+      throw new Error('Email mengandung kata terlarang!');
+    }
+    const newUser = { id: Date.now(), name, email };
+    users.push(newUser);
+    res.status(201).json(newUser);
+  } catch (err) {
+    next(err);
   }
-  const newUser = { id: Date.now(), name, email };
-  users.push(newUser);
-  res.status(201).json(newUser);
 };
 
 const updateUsers = (req, res) => {

@@ -7,6 +7,6 @@ const checkApiKey = (req, res, next) => {
       .json({ message: 'Unauthorized: API key invalid atau tidak ada' });
   }
   next();
-};
+};  
 
 module.exports = checkApiKey;

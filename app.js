@@ -1,4 +1,6 @@
 const express = require('express');
+const mongoose = require('mongoose');
+require('dotenv').config();
 const app = express();
 const PORT = 3000;
 
@@ -17,6 +19,11 @@ app.use('/users', checkApiKey, userRoutes);
 app.get('/', (req, res) => {
   res.send('Selamat datang di API express.js');
 });
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log('🟢 MongoDB connected'))
+  .catch((err) => console.error('🔴 MongoDB connection error:', err));
 
 app.listen(PORT, () => {
   console.log(`Server aktif di http://localhost:${PORT}`);

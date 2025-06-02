@@ -1,8 +1,11 @@
 const express = require('express');
-const mongoose = require('mongoose');
-require('dotenv').config();
+const dotenv = require('dotenv');
+const connectDB = require('./config/db');
+
+dotenv.config();
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+connectDB();
 
 app.use(express.json());
 
@@ -20,16 +23,11 @@ app.get('/', (req, res) => {
   res.send('Selamat datang di API express.js');
 });
 
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log('🟢 MongoDB connected'))
-  .catch((err) => console.error('🔴 MongoDB connection error:', err));
-
-app.listen(PORT, () => {
-  console.log(`Server aktif di http://localhost:${PORT}`);
-});
-
 app.use((err, req, res, next) => {
   console.error('Error terjadi:', err.message);
   res.status(500).json({ message: 'Terjadi kesalahan di server' });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server aktif di http://localhost:${PORT}`);
 });
